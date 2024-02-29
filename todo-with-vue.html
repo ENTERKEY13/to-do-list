@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My ToDoList</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.0/vue.min.js" integrity="sha512-2v91ndX8jAw9J2IAZ4RnH+lKMOi0PzyFJ1i6D69Nx1RlY2UJpy6r1WIo35HrRkHG4ARj1Xl/xyoh0X9ze+6Y2w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        #todo-form .todo-input{
+            width: 300px;
+        }
+        .todo-item.finish .todo-text{
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body class="p-4">
+<div class="container" id="todo-form">
+
+    <div class="card">
+        <div class="card-header">
+            TODO  (<span id="total-todo">{{unfinishTodo}}</span>)
+        </div>
+        <div class="card-body">
+            <div id="todo-list">
+                <div class="row mb-1 no-gutters todo-item" :class="{finish:todo.finish}" v-for="(todo,i) in todos">
+                    <div class="col-auto pt-2">
+                        <input type="checkbox" class="todo-finish" v-model="todos[i].finish"/>
+                    </div>
+                    <div class="col ml-3">
+                        <input type="text" class="form-control todo-text" v-model="todos[i].text"  :readonly="todo.finish"/>
+                    </div>
+                    <div class="col-auto ml-2">
+                        <div class="todo-remove btn btn-danger" @click="removeTodo(i)">&times;</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="form-inline">
+                <input type="text" id="new_todo" v-model="new_todo_text"  class="form-control todo-input"/>
+                <div id="add-btn" class="ml-2 btn btn-primary" @click="addTodo">เพิ่ม</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    new Vue({
+        el:"#todo-form",
+        data:function(){
+            return {
+                todos:[],
+                new_todo_text:''
+            }
+        },
+        computed:{
+            unfinishTodo:function(){
+                return this.todos.filter(function(todo){
+                    console.log(todo)
+                    return !todo.finish
+                }).length
+            }
+        },
+        methods:{
+            addTodo:function(){
+                this.todos.push({
+                    text: this.new_todo_text,
+                    finish:false,
+                })
+                this.new_todo_text = ''
+            },
+            removeTodo:function(i){
+                this.todos.splice(i,1)
+            },
+            tickFinish:function(event){
+                var tick = event.target.checked
+
+            }
+        }
+    })
+</script>
+
+</body>
+</html>
