@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My ToDOList</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        #todo-form .todo-input{
+            width: 300px;
+        }
+        #todo-item-template{
+            display: none;
+        }
+    </style>
+</head>
+<body class="p-4">
+    <div class="container" id="todo-form">
+
+        <div class="card">
+            <div class="card-header">
+                TODO  (<span id="total-todo">0</span>)
+            </div>
+            <div class="card-body">
+                <div id="todo-list"></div>
+            </div>
+            <div class="card-footer">
+                <div class="form-inline">
+                    <input type="text" id="new_todo"   class="form-control todo-input"/>
+                    <div id="add-btn" class="ml-2 btn btn-primary">เพิ่ม</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-1 no-gutters todo-item" id="todo-item-template">
+        <div class="col-auto pt-2">
+            <input type="checkbox" class="todo-finish" />
+        </div>
+        <div class="col ml-3">
+            <input type="text" class="form-control todo-text" />
+        </div>
+        <div class="col-auto ml-2">
+            <div class="todo-remove btn btn-danger">&times;</div>
+        </div>
+    </div>
+
+    <script>
+        $(function(){
+            var todoItemTemplate =  $("#todo-item-template");
+            todoItemTemplate.remove()
+            todoItemTemplate.removeAttr("id");
+            var todoList = $("#todo-list");
+            var newTodoInput = $("#new_todo")
+
+            var totalTodo = $("#total-todo")
+            function setTotalTodo(){
+                totalTodo.html($(".todo-item .todo-finish:not(:checked)").length)
+            }
+
+            $("#add-btn").click(function(){
+               var newTodo =  todoItemTemplate.clone()
+               newTodo.find('.todo-text').val(newTodoInput.val())
+               newTodo.appendTo(todoList )
+               newTodoInput.val('')
+               newTodoInput.focus()
+               setTotalTodo()
+
+            //    newTodo.find(".todo-remove").click(function(){
+            //         $(this).parents(".todo-item").remove()
+            //         setTotalTodo()
+            //    })
+            //    newTodo.find('.todo-finish').change(function(){
+            //         if(this.checked){
+            //             $(this).parents('.todo-item').find('.todo-text').css('text-decoration','line-through').attr("readonly",true)
+            //         }else{
+            //             $(this).parents('.todo-item').find('.todo-text').css('text-decoration','none').attr("readonly",false)
+            //         }
+            //         setTotalTodo()
+            //    })
+            })
+            newTodoInput.focus()
+
+            todoList.on("click",".todo-remove",function(){
+                    $(this).parents(".todo-item").remove()
+                    setTotalTodo()
+               })
+               todoList.on('click','.todo-finish',function(){
+                    if(this.checked){
+                        $(this).parents('.todo-item').find('.todo-text').css('text-decoration','line-through').attr("readonly",true)
+                    }else{
+                        $(this).parents('.todo-item').find('.todo-text').css('text-decoration','none').attr("readonly",false)
+                    }
+                    setTotalTodo()
+               })
+
+
+        })
+    </script>
+
+</body>
+</html>
